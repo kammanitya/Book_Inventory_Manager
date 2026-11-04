@@ -1,0 +1,102 @@
+<!doctype html>
+<html lang="en">
+<head>
+    <meta charset="utf-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1">
+    <title>Book Inventory Manager</title>
+    <style>
+        body {
+            font: 16px Arial;
+            background: #f2f5f9;
+            color: #253247;
+            padding: 30px;
+        }
+
+        main {
+            max-width: 760px;
+            margin: auto;
+            background: white;
+            padding: 28px;
+            border-radius: 12px;
+        }
+
+        h1 {
+            color: #17365d;
+        }
+
+        input, select, button {
+            padding: 10px;
+            margin: 5px;
+            border: 1px solid #ccd5df;
+            border-radius: 6px;
+        }
+
+        button {
+            background: #17365d;
+            color: white;
+            cursor: pointer;
+        }
+
+        li {
+            padding: 9px;
+            border-bottom: 1px solid #ddd;
+        }
+    </style>
+</head>
+<body>
+    <main>
+        <h1>Book Inventory Manager</h1>
+        <input id="title" placeholder="Book title">
+        <input id="author" placeholder="Author">
+        <input id="qty" type="number" min="0" placeholder="Quantity">
+        <button onclick="add()">Add book</button>
+
+        <p>
+            <input id="q" placeholder="Search" oninput="render()">
+        </p>
+        <ul id="list"></ul>
+
+        <script>
+            let books = [];
+
+            function add() {
+                let t = title.value;
+                let a = author.value;
+                let n = Number(qty.value);
+
+                if (
+                    !t ||
+                    !a ||
+                    !Number.isInteger(n) ||
+                    n < 0
+                ) return;
+
+                books.push({ t, a, n });
+
+                title.value = '';
+                author.value = '';
+                qty.value = '';
+
+                render();
+            }
+
+            function render() {
+                list.innerHTML = '';
+
+                books
+                    .filter(b =>
+                        (b.t + ' ' + b.a)
+                            .toLowerCase()
+                            .includes(q.value.toLowerCase())
+                    )
+                    .forEach(b => {
+                        let li = document.createElement('li');
+                        li.textContent =
+                            b.t + ' — ' + b.a + ' | Stock: ' + b.n;
+                        list.append(li);
+                    });
+            }
+        </script>
+    </main>
+</body>
+</html>
